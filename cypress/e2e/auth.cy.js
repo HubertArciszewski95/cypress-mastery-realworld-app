@@ -15,7 +15,7 @@ describe('Authorization', () => {
     });
 
     it('should display correct link to login page', () => {
-
+      cy.contains("Sign in to your account").should("be.visible").and('have.attr', 'href', '#/login');
     });
 
     it('should redirect to home page after registering, as logged in', () => {
@@ -92,7 +92,7 @@ describe('Authorization', () => {
     });
 
     it('should display correct link to register page', () => {
-
+      cy.contains("Need an account?").should("be.visible").and("have.attr", "href", "#/register");
     });
 
     it('should be able to login and logout', () => {
