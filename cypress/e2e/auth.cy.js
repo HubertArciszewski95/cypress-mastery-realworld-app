@@ -92,7 +92,11 @@ describe('Authorization', () => {
     });
 
     it('should display correct link to register page', () => {
+<<<<<<< HEAD
       cy.contains("Need an account?").should("be.visible").and("have.attr", "href", "#/register");
+=======
+
+>>>>>>> 9c05f5b (Lesson start - Testing page navigation)
     });
 
     it('should be able to login and logout', () => {
