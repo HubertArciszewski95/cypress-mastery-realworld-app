@@ -15,9 +15,15 @@
     "frontend"
   ],
   "scripts": {
-    "dev": "concurrently \"npm run dev -w backend\" \"npm run start -w frontend\""
+    "dev": "concurrently \"npm run dev -w backend\" \"npm run start -w frontend\"",
+    "cy:open": "cypress open",
+    "cy:run": "cypress run",
+    "cy:run:chrome": "cypress run --browser chrome",
+    "cy:run:browser": "cypress run --browser"
   },
   "devDependencies": {
-    "concurrently": "^7.3.0"
+    "@faker-js/faker": "^8.0.2",
+    "concurrently": "^7.3.0",
+    "cypress": "^12.16.0"
   }
 }
