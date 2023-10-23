@@ -1,37 +1,34 @@
+import standardUser from "../fixtures/users/standard.json";
+
 describe('Header navigation', () => {
 
 	context('Not logged in', () => {
 		it('should display correct navigation options and links', () => {
-			// Check if only 3 navigation options are visible in the header.
+			cy.visit("/");
 
-			// Then check if the:
-			// - "Home" option is visible
-			// - "Sign in" option is visible
-			// - "Sign up" option is visible
+			cy.getByTestId("nav-item").filter(":visible").should("have.length", 3);
 
-			// Also check if navigation for those options works as expected.
+			cy.getByTestId("nav-item").contains("Home").should("be.visible").and("have.attr", "href", "#/");
+			cy.getByTestId("nav-item").contains("Sign in").should("be.visible").and("have.attr", "href", "#/login");
+			cy.getByTestId("nav-item").contains("Sign up").should("be.visible").and("have.attr", "href", "#/register");
 		});
 	});
 
 	context('Logged in', () => {
 		it('should display correct navigation options and links', () => {
-			// Check if only 3 navigation options are visible in the header.
-			// Check if only 3 dropdown options exist in dropdown menu.
+			cy.login(standardUser.email, standardUser.password);
+			cy.visit("/");
 
-			// Then check if the:
-			// - "Home" option is visible
-			// - "New Article" option is visible
-			// - "Username" option is visible
+			cy.getByTestId("nav-item").filter(":visible").should("have.length", 3);
+			cy.getByTestId("dropdown-item").should("have.length", 3);
 
-			// Also check if navigation for those options works as expected.
-			// For "Username" option check if there will be no redirecting.
+			cy.getByTestId("nav-item").contains("Home").should("be.visible").and("have.attr", "href", "#/");
+			cy.getByTestId("nav-item").contains("New Article").should("be.visible").and("have.attr", "href", "#/editor");
+			cy.getByTestId("nav-item").contains(standardUser.username).should("be.visible").and("not.have.attr", "href");
 
-			// Then check if the dropdown menu contains expected options:
-			// - "Profile" option exist
-			// - "Settings" option exist
-			// - "Logout" option exist
-
-			// Also check if navigation for those options works as expected.
+			cy.getByTestId("dropdown-item").contains("Profile").should("have.attr", "href", `#/profile/${standardUser.username}`);
+			cy.getByTestId("dropdown-item").contains("Settings").should("have.attr", "href", "#/settings");
+			cy.getByTestId("dropdown-item").contains("Logout").should("have.attr", "href", "#/");
 		});
 	});
 });
