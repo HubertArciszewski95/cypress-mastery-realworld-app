@@ -1,6 +1,8 @@
 describe('Cypress core concepts', () => {
 
-    it('', () => {
-
+    it('Synchronous vs Asynchronous', () => {
+        console.log("Start");
+        console.log("Middle");
+        console.log("End");
     });
 });
