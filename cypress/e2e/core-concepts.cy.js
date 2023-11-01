@@ -5,6 +5,10 @@ describe('Cypress core concepts', () => {
 
         cy.getByTestId("username-input").type("user");
         cy.getByTestId("email-input").type("user@example.com");
-        cy.getByTestId("password-input").type("test");
+        cy.getByTestId("password-input").type("test").then(() => {
+            alert("Test is finished");
+        });
+
+        cy.getByTestId("signup-btn").click();
     });
 });
