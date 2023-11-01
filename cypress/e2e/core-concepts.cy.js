@@ -1,12 +1,10 @@
 describe('Cypress core concepts', () => {
 
-    it('Synchronous vs Asynchronous', () => {
-        console.log("Start");
+    it('Cypress async nature', () => {
+        cy.visit("/register");
 
-        setTimeout(function () {
-            console.log("Middle");
-        }, 2000);
-
-        console.log("End");
+        cy.getByTestId("username-input").type("user");
+        cy.getByTestId("email-input").type("user@example.com");
+        cy.getByTestId("password-input").type("test");
     });
 });
