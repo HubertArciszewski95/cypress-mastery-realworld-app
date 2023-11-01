@@ -2,7 +2,11 @@ describe('Cypress core concepts', () => {
 
     it('Synchronous vs Asynchronous', () => {
         console.log("Start");
-        console.log("Middle");
+
+        setTimeout(function () {
+            console.log("Middle");
+        }, 2000);
+
         console.log("End");
     });
 });
