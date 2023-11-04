@@ -1,14 +1,11 @@
 describe('Cypress core concepts', () => {
 
-    it('Cypress async nature', () => {
-        cy.visit("/register");
+    it('Subject management', () => {
+        cy.visit("/");
 
-        cy.getByTestId("username-input").type("user");
-        cy.getByTestId("email-input").type("user@example.com");
-        cy.getByTestId("password-input").type("test").then(() => {
-            alert("Test is finished");
-        });
-
-        cy.getByTestId("signup-btn").click();
+        const home = cy.getByTestId("nav-item").eq(0);
+        // do some more actions...
+        // ...
+        cy.getByTestId("nav-item").eq(0).should("have.text", home);
     });
 });
