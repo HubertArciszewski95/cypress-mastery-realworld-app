@@ -1,19 +1,15 @@
 describe('Cypress core concepts', () => {
 
     it('Iterate over DOM elements - Examples', () => {
-        cy.visit("/");
+        cy.visit("https://www.saucedemo.com/v1/inventory.html");
 
-        const titleList = [];
-        cy.get(".article-preview").should("have.length", 3).each(($article, index) => {
-            const title = $article.find("h1").text();
-
-            cy.log(`I have run: ${index + 1} times!!!`);
-            if (title === "Lorem Ipsum 2") {
-                cy.wrap($article).contains("span", "Read more...").click();
-                // Do more stuff
-
-                return false;
-            }
+        let totalPrice = 0;
+        cy.get(".inventory_item_price").should("be.visible").each(($price) => {
+            const price = parseFloat($price.text().replace("$", ""));
+            
+            totalPrice += price;
+        }).then(() => {
+            cy.log(`The total price is: $${totalPrice}`);
         });
     });
 });
