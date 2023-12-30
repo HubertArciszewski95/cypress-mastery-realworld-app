@@ -7,15 +7,13 @@ describe('Cypress core concepts', () => {
         cy.get(".article-preview").should("have.length", 3).each(($article, index) => {
             const title = $article.find("h1").text();
 
-            titleList.push(title);
-        });
+            cy.log(`I have run: ${index + 1} times!!!`);
+            if (title === "Lorem Ipsum 2") {
+                cy.wrap($article).contains("span", "Read more...").click();
+                // Do more stuff
 
-        // cy.wrap(titleList).should("deep.equal", ["Lorem Ipsum 1", "Lorem Ipsum 2", "Lorem Ipsum 3"]);
-
-        cy.wrap(titleList).then((list) => {
-            cy.wrap(list[0]).should("equal", "Lorem Ipsum 1");
-            cy.wrap(list[1]).should("equal", "Lorem Ipsum 2");
-            cy.wrap(list[2]).should("equal", "Lorem Ipsum 3");
+                return false;
+            }
         });
     });
 });
