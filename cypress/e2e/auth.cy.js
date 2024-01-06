@@ -1,7 +1,9 @@
+import LoginPage from "../page-object/login-page";
 import { faker } from "@faker-js/faker";
 import standardUser from "../fixtures/users/standard.json";
 
 describe('Authorization', () => {
+  const loginPage = new LoginPage();
 
   it('should redirect unauthenticated user to home page', () => {
     cy.visit("/settings");
@@ -111,19 +113,19 @@ describe('Authorization', () => {
     });
 
     it('should display error for not existing user', () => {
-      cy.getByTestId("email-input").type("notExisting@email.com");
-      cy.getByTestId("password-input").type("invalidPassword");
-      cy.getByTestId("signin-btn").click();
+      loginPage.typeEmail("notExisting@email.com");
+      loginPage.typePassword("invalidPassword");
+      loginPage.clickSignInButton();
 
-      cy.getByTestId("error-message").should("be.visible").and("have.text", "Email or password is invalid");
+      loginPage.elements.errorMessage().should("be.visible").and("have.text", "Email or password is invalid");
     });
 
     it('should display error for existing user when invalid password', () => {
-      cy.getByTestId("email-input").type(standardUser.email);
-      cy.getByTestId("password-input").type("invalidPassword");
-      cy.getByTestId("signin-btn").click();
+      loginPage.typeEmail(standardUser.email);
+      loginPage.typePassword("invalidPassword");
+      loginPage.clickSignInButton();
 
-      cy.getByTestId("error-message").should("be.visible").and("have.text", "Email or password is invalid");
+      loginPage.elements.errorMessage().should("be.visible").and("have.text", "Email or password is invalid");
     });
   });
 })
