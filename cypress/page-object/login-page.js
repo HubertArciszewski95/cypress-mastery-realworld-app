@@ -7,6 +7,10 @@ class LoginPage {
         errorMessage: () => cy.getByTestId("error-message"),
     }
 
+    visit() {
+        cy.visit("/login");
+    }
+
     typeEmail(email) {
         this.elements.emailInput().type(email);
     }

@@ -1,9 +1,11 @@
 import LoginPage from "../page-object/login-page";
+import Header from "../page-object/header";
 import { faker } from "@faker-js/faker";
 import standardUser from "../fixtures/users/standard.json";
 
 describe('Authorization', () => {
   const loginPage = new LoginPage();
+  const header = new Header();
 
   it('should redirect unauthenticated user to home page', () => {
     cy.visit("/settings");
@@ -90,7 +92,7 @@ describe('Authorization', () => {
   context('Login', () => {
 
     beforeEach(() => {
-      cy.visit("/login");
+      loginPage.visit();
     });
 
     it('should display correct link to register page', () => {
@@ -98,18 +100,17 @@ describe('Authorization', () => {
     });
 
     it('should be able to login and logout', () => {
-      cy.getByTestId("email-input").type(standardUser.email);
-      cy.getByTestId("password-input").type(standardUser.password);
-      cy.getByTestId("signin-btn").click();
+      loginPage.typeEmail(standardUser.email);
+      loginPage.typePassword(standardUser.password);
+      loginPage.clickSignInButton();
 
       cy.location("hash").should("equal", "#/");
-      cy.getByTestId("nav-item").should("contain", standardUser.username);
+      header.elements.navItems().should("contain", standardUser.username);
 
-      cy.getByTestId("nav-item").last().click();
-      cy.getByTestId("dropdown-item").contains("Logout").click();
+      header.logout();
 
       cy.location("hash").should("equal", "#/");
-      cy.getByTestId("nav-item").should("not.contain", standardUser.username);
+      header.elements.navItems().should("not.contain", standardUser.username);
     });
 
     it('should display error for not existing user', () => {
