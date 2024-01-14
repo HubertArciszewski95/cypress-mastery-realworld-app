@@ -1,9 +1,11 @@
+import RegisterPage from "../page-object/register-page";
 import LoginPage from "../page-object/login-page";
 import Header from "../page-object/header";
 import { faker } from "@faker-js/faker";
 import standardUser from "../fixtures/users/standard.json";
 
 describe('Authorization', () => {
+  const registerPage = new RegisterPage();
   const loginPage = new LoginPage();
   const header = new Header();
 
@@ -15,7 +17,7 @@ describe('Authorization', () => {
   context('Register', () => {
 
     beforeEach(() => {
-      cy.visit("/register");
+      registerPage.visit();
     });
 
     it('should display correct link to login page', () => {
@@ -27,13 +29,13 @@ describe('Authorization', () => {
       const email = `${username}@example.com`;
       const password = "testPassword";
 
-      cy.getByTestId("username-input").type(username);
-      cy.getByTestId("email-input").type(email);
-      cy.getByTestId("password-input").type(password);
-      cy.getByTestId("signup-btn").click();
+      registerPage.typeUsername(username);
+      registerPage.typeEmail(email);
+      registerPage.typePassword(password);
+      registerPage.clickSignUpButton();
 
       cy.location("hash").should("equal", "#/");
-      cy.getByTestId("nav-item").should("contain", username);
+      header.elements.navItems().should("contain", username);
     });
 
     it('should display register form validation errors', () => {
@@ -44,48 +46,51 @@ describe('Authorization', () => {
         "email@domain",      // Missing top level domain (.com/.net/.org/etc)
       ];
 
-      cy.getByTestId("username-input").type("Jon Snow");
-      cy.getByTestId("username-input").clear().blur();
+      registerPage.typeUsername("John Snow");
+      registerPage.clearInput("username");
+      registerPage.blurInput("username");
 
-      cy.getByTestId("username-validation-msg").should("be.visible").and("have.text", "Username is required");
+      registerPage.elements.validationMessage("username").should("be.visible").and("have.text", "Username is required");
 
-      cy.getByTestId("email-input").type("JonSnow@example.com");
-      cy.getByTestId("email-input").clear().blur();
+      registerPage.typeEmail("JonSnow@example.com");
+      registerPage.clearInput("email");
+      registerPage.blurInput("email");
 
-      cy.getByTestId("email-validation-msg").should("be.visible").and("have.text", "Email is required");
+      registerPage.elements.validationMessage("email").should("be.visible").and("have.text", "Email is required");
 
-      cy.getByTestId("password-input").type("s3cret");
-      cy.getByTestId("password-input").clear().blur();
+      registerPage.typePassword("s3cret");
+      registerPage.clearInput("password");
+      registerPage.blurInput("password");
 
-      cy.getByTestId("password-validation-msg").should("be.visible").and("have.text", "Password is required");
+      registerPage.elements.validationMessage("password").should("be.visible").and("have.text", "Password is required");
 
-      cy.getByTestId("password-input").type("abc");
-      cy.getByTestId("password-validation-msg").should("be.visible").and("have.text", "Password must have a minimum 4 characters");
+      registerPage.typePassword("abc");
+      registerPage.elements.validationMessage("password").should("be.visible").and("have.text", "Password must have a minimum 4 characters");
 
       wrongEmailFormat.forEach((email) => {
-        cy.getByTestId("email-input").clear();
-        cy.getByTestId("email-input").type(email);
+        registerPage.clearInput("email");
+        registerPage.typeEmail(email);
 
-        cy.getByTestId("email-validation-msg").should("be.visible").and("have.text", "Incorrect email format");
+        registerPage.elements.validationMessage("email").should("be.visible").and("have.text", "Incorrect email format");
       });
     });
 
     it('should display error for taken username', () => {
-      cy.getByTestId("username-input").type(standardUser.username);
-      cy.getByTestId("email-input").type("notExist@example.com");
-      cy.getByTestId("password-input").type("password");
-      cy.getByTestId("signup-btn").click();
+      registerPage.typeUsername(standardUser.username);
+      registerPage.typeEmail("notExist@example.com");
+      registerPage.typePassword("password");
+      registerPage.clickSignUpButton();
 
-      cy.getByTestId("error-message").should("be.visible").and("have.text", "Username has already been taken");
+      registerPage.elements.errorMessage().should("be.visible").and("have.text", "Username has already been taken");
     });
 
     it('should display error for taken email', () => {
-      cy.getByTestId("username-input").type("notExist");
-      cy.getByTestId("email-input").type(standardUser.email);
-      cy.getByTestId("password-input").type("password");
-      cy.getByTestId("signup-btn").click();
+      registerPage.typeUsername("notExist");
+      registerPage.typeEmail(standardUser.email);
+      registerPage.typePassword("password");
+      registerPage.clickSignUpButton();
 
-      cy.getByTestId("error-message").should("be.visible").and("have.text", "Email has already been taken");
+      registerPage.elements.errorMessage().should("be.visible").and("have.text", "Email has already been taken");
     });
   });
 
