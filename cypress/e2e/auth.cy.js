@@ -1,6 +1,6 @@
 import RegisterPage from "../page-object/register-page";
 import LoginPage from "../page-object/login-page";
-import Header from "../page-object/header";
+import Header from "../page-object/components/header";
 import { faker } from "@faker-js/faker";
 import standardUser from "../fixtures/users/standard.json";
 
