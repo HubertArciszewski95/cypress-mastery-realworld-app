@@ -1,3 +1,5 @@
+import { commonElements } from "./components/common-elements";
+
 class LoginPage {
 
     elements = {
