@@ -1,12 +1,11 @@
-import HomePage from "../page-object/home-page";
-import { commonSelectors } from "../page-object/components/common-elements";
+import LoginPage from "../page-object/login-page";
 
 describe('Example', () => {
-    const homePage = new HomePage();
+    const loginPage = new LoginPage();
 
     it('test', () => {
         cy.visit("/");
 
-        homePage.elements.someItem().should("have.class", commonSelectors.checked);
+        loginPage.elements.emailInput({ timeout: 10_000 }).should("be.visible");
     });
 });
