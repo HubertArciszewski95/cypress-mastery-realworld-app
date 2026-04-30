@@ -17,10 +17,15 @@ function DropdownMenu() {
     setDropdown((prev) => !prev);
   };
 
+  const closeDropdown = () => {
+    setDropdown(false);
+  };
+
   return (
     <li className="nav-item dropdown" data-testid="nav-item">
       <div
         className="nav-link dropdown-toggle cursor-pointer"
+        aria-expanded={dropdown}
         onClick={handleClick}
       >
         <Avatar alt={username} className="user-pic" src={image} />
@@ -30,7 +35,8 @@ function DropdownMenu() {
       <div
         className="dropdown-menu"
         style={{ display: dropdown ? "block" : "none" }}
-        onMouseLeave={handleClick}
+        onClick={closeDropdown}
+        onMouseLeave={closeDropdown}
       >
         <DropdownItem
           icon="ion-person"

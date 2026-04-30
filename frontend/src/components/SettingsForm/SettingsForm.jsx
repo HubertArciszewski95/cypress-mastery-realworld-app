@@ -16,7 +16,8 @@ function SettingsForm() {
     username: loggedUser.username,
   });
 
-  const [inactive, setInactive] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -28,18 +29,36 @@ function SettingsForm() {
     const value = e.target.value;
 
     setForm((form) => ({ ...form, [name]: value }));
-    setInactive(false);
+    setSuccessMessage("");
   };
 
   const formSubmit = async (e) => {
     e.preventDefault();
 
-    if (inactive) return;
+    if (isSaving) return;
 
-    userUpdate({ headers, bio, email, image, password, username })
-      .then(setAuthState)
-      .catch(console.error);
-    setInactive(true);
+    setIsSaving(true);
+    setSuccessMessage("");
+
+    try {
+      const updatedAuthState = await userUpdate({
+        headers,
+        bio,
+        email,
+        image,
+        password,
+        username,
+      });
+
+      if (!updatedAuthState) return;
+
+      setAuthState(updatedAuthState);
+      setSuccessMessage("Your settings have been updated.");
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   return (
@@ -85,11 +104,16 @@ function SettingsForm() {
             handler={inputHandler}
           ></FormFieldset>
 
-          {!inactive && (
-            <FormButton
-              text={"Update Settings"}
-            ></FormButton>
+          {successMessage && (
+            <p className="settings-success-message" role="status">
+              {successMessage}
+            </p>
           )}
+
+          <FormButton
+            disabled={isSaving}
+            text={isSaving ? "Updating Settings..." : "Update Settings"}
+          ></FormButton>
         </fieldset>
       </form>
     )

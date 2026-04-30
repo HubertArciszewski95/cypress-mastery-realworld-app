@@ -49,7 +49,7 @@ function CommentList({ triggerUpdate, updateComments }) {
       );
     })
   ) : (
-    <div>There are no comments yet...</div>
+    <div className="empty-comments">There are no comments yet...</div>
   );
 }
 
